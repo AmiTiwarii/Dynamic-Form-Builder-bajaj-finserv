@@ -21,16 +21,22 @@ interface DynamicFormProps {
   };
 }
 
+// Define a type for form values
+type FormValues = Record<string, string | string[] | boolean>;
+
 export default function DynamicForm({ formData, userData }: DynamicFormProps) {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
-  const [formValues, setFormValues] = useState<Record<string, any>>({});
+  const [formValues, setFormValues] = useState<FormValues>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { form } = formData;
   const sections = form.sections;
   const currentSection = sections[currentSectionIndex];
 
-  const handleFieldChange = (fieldId: string, value: any) => {
+  const handleFieldChange = (
+    fieldId: string,
+    value: string | string[] | boolean
+  ) => {
     setFormValues((prev) => ({
       ...prev,
       [fieldId]: value,
@@ -88,7 +94,7 @@ export default function DynamicForm({ formData, userData }: DynamicFormProps) {
       // Add more validation as needed based on field type
       if (field.type === "email" && formValues[field.fieldId]) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formValues[field.fieldId])) {
+        if (!emailRegex.test(String(formValues[field.fieldId]))) {
           newErrors[field.fieldId] = "Please enter a valid email address";
           isValid = false;
         }
@@ -96,7 +102,7 @@ export default function DynamicForm({ formData, userData }: DynamicFormProps) {
 
       if (field.type === "tel" && formValues[field.fieldId]) {
         const phoneRegex = /^\d{10}$/;
-        if (!phoneRegex.test(formValues[field.fieldId])) {
+        if (!phoneRegex.test(String(formValues[field.fieldId]))) {
           newErrors[field.fieldId] =
             "Please enter a valid 10-digit phone number";
           isValid = false;

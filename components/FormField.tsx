@@ -15,8 +15,8 @@ import {
 
 interface FormFieldComponentProps {
   field: FormField;
-  value: any;
-  onChange: (value: any) => void;
+  value: string | string[] | boolean;
+  onChange: (value: string | string[] | boolean) => void;
   error?: string;
 }
 
@@ -49,7 +49,7 @@ export default function FormFieldComponent({
             id={fieldId}
             type={type}
             placeholder={placeholder || ""}
-            value={value}
+            value={typeof value === "string" ? value : ""}
             onChange={(e) => onChange(e.target.value)}
             required={required}
             data-testid={dataTestId}
@@ -64,7 +64,7 @@ export default function FormFieldComponent({
           <Textarea
             id={fieldId}
             placeholder={placeholder || ""}
-            value={value}
+            value={typeof value === "string" ? value : ""}
             onChange={(e) => onChange(e.target.value)}
             required={required}
             data-testid={dataTestId}
@@ -77,7 +77,7 @@ export default function FormFieldComponent({
       case "dropdown":
         return (
           <Select
-            value={value}
+            value={typeof value === "string" ? value : ""}
             onValueChange={onChange}
             data-testid={dataTestId}
           >
@@ -101,7 +101,7 @@ export default function FormFieldComponent({
       case "radio":
         return (
           <RadioGroup
-            value={value}
+            value={typeof value === "string" ? value : ""}
             onValueChange={onChange}
             className="flex flex-col space-y-2"
             data-testid={dataTestId}
@@ -162,8 +162,8 @@ export default function FormFieldComponent({
             <div className="flex items-center space-x-2">
               <Checkbox
                 id={fieldId}
-                checked={value === true}
-                onCheckedChange={onChange}
+                checked={Boolean(value)}
+                onCheckedChange={(checked) => onChange(Boolean(checked))}
                 data-testid={dataTestId}
               />
               <Label htmlFor={fieldId}>{label}</Label>

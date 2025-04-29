@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import LoginForm from "@/components/LoginForm";
 import DynamicForm from "@/components/DynamicForm";
 import type { FormResponse } from "@/types/form";
@@ -10,7 +9,6 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState({ rollNumber: "", name: "" });
   const [formData, setFormData] = useState<FormResponse | null>(null);
-  const router = useRouter();
 
   const handleLoginSuccess = async (rollNumber: string, name: string) => {
     setUserData({ rollNumber, name });
